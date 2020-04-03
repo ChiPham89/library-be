@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     Books.associate = function(models) {
         Books.belongsTo(models.Authors, {foreignKey: 'authorId',as: 'author'})
-        Books.hasMany(models.Copies, {as: 'copies'})
+        Books.hasMany(models.Copies, {foreignKey: 'bookId', as: 'copies'})
     };
     return Books;
 }

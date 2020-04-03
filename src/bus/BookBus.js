@@ -1,4 +1,5 @@
 import models from '../../models';
+import CopiesStatus from '../constant/CopiesStatus';
 
 export default class BookBus {
     static getBooks = (req, res, next) => {
@@ -24,7 +25,8 @@ export default class BookBus {
             where: {
                 authorId: req.params.author_id,
                 id: req.params.book_id
-            }
+            },
+            include: ['author', 'copies']
         })
         .then(book => {
             res.send(book);
@@ -33,11 +35,19 @@ export default class BookBus {
 
     static createBook = (req, res, next) => {
         let authorId = req.params.author_id;
+        let numberOfCopy = req.body.numberOfCopy ? req.body.numberOfCopy : 1;
         models.Books.create({
             ...req.body,
             authorId
         })
         .then(book => {
+            for(let i = 0; i < numberOfCopy; i++) {
+                models.Copies.create({
+                    status: CopiesStatus.AVAILABLE,
+                    bookId: book.id
+                })
+            }
+            
             res.send(book);
         });
     }
