@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true
         },
         title: DataTypes.STRING,
-        authorId: DataTypes.INTEGER
+        authorId: DataTypes.INTEGER,
+        category: DataTypes.STRING
     });
     Books.associate = function(models) {
         Books.belongsTo(models.Authors, {foreignKey: 'authorId',as: 'author'})

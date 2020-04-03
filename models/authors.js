@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         penName: DataTypes.STRING
     });
     Authors.associate = function(models) {
-        Authors.hasMany(models.Books, {as: 'books'})
+        Authors.hasMany(models.Books, {foreignKey: 'authorId', as: 'books'})
     };
     return Authors;
 }

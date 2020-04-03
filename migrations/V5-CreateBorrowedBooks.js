@@ -8,22 +8,22 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            // copyId: {
-            //     allowNull: false,
-            //     type: Sequelize.INTEGER,
-            //     references: {
-            //         models: "Copies",
-            //         key: "id"
-            //     }
-            // },
-            // userId: {
-            //     allowNull: false,
-            //     type: Sequelize.INTEGER,
-            //     references: {
-            //         models: "Users",
-            //         key: "id"
-            //     }
-            // },
+            copyId: {
+                allowNull: false,
+                type: Sequelize.INTEGER,
+                references: {
+                    models: "Copies",
+                    key: "id"
+                }
+            },
+            userId: {
+                allowNull: false,
+                type: Sequelize.INTEGER,
+                references: {
+                    models: "Users",
+                    key: "id"
+                }
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE
