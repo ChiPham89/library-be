@@ -19,6 +19,7 @@ app.get('/books', BookBus.getBooks);
 app.get('/authors/:author_id/books', BookBus.getBooksByAuthor);
 app.get('/authors/:author_id/books/:book_id', BookBus.getBook);
 app.post('/authors/:author_id/books', BookBus.createBook);
+app.post('/authors/:author_id/books/:book_id/copies', BookBus.addCopies);
 app.put('/authors/:author_id/books/:book_id', BookBus.updateBook);
 app.delete('/authors/:author_id/books/:book_id', BookBus.removeBook);
 

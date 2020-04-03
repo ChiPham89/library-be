@@ -11,9 +11,18 @@ module.exports = (sequelize, DataTypes) => {
         authorId: DataTypes.INTEGER,
         category: DataTypes.STRING
     });
-    Books.associate = function(models) {
-        Books.belongsTo(models.Authors, {foreignKey: 'authorId',as: 'author'})
-        Books.hasMany(models.Copies, {foreignKey: 'bookId', as: 'copies'})
+    Books.associate = (models) => {
+        Books.belongsTo(models.Authors, {
+            foreignKey: 'authorId',
+            as: 'author', 
+            onDelete: 'cascade'
+        });
+
+        Books.hasMany(models.Copies, {
+            foreignKey: 'bookId', 
+            as: 'copies',
+            onDelete: 'CASCADE'
+        });
     };
     return Books;
 }

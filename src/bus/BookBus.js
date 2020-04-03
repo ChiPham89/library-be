@@ -52,6 +52,26 @@ export default class BookBus {
         });
     }
 
+    static addCopies = (req, res, next) => {
+        let numberOfCopy = req.body.numberOfCopy ? req.body.numberOfCopy : 1;
+        models.Books.findOne({
+            where: {
+                authorId: req.params.author_id,
+                id: req.params.book_id
+            }
+        })
+        .then(book => {
+            for(let i = 0; i < numberOfCopy; i++) {
+                models.Copies.create({
+                    status: CopiesStatus.AVAILABLE,
+                    bookId: book.id
+                })
+            }
+            
+            res.send(book);
+        });
+    }
+
     static updateBook = (req, res, next) => {
         let authorId = req.params.author_id;
         models.Books.update({

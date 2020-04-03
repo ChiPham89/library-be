@@ -10,7 +10,10 @@ module.exports = (sequelize, DataTypes) => {
         bookId: DataTypes.INTEGER
     });
     Copies.associate = function(models) {
-        Copies.belongsTo(models.Books, {foreignKey: 'bookId',as: 'book'})
+        Copies.belongsTo(models.Books, {
+            foreignKey: 'bookId', 
+            as: 'book'
+        })
     };
     return Copies;
 }
