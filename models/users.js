@@ -10,5 +10,13 @@ module.exports = (sequelize, DataTypes) => {
         firstName: DataTypes.STRING,
         lastName: DataTypes.STRING
     });
+
+    Users.associate = function(models) {
+        Users.belongsToMany(models.Copies, {
+            through: 'BorrowedBooks', 
+            foreignKey: 'userId', 
+            as: 'borrowedBooks'
+        })
+    };
     return Users;
 }

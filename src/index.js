@@ -27,6 +27,7 @@ app.delete('/authors/:author_id/books/:book_id', BookBus.removeBook);
 app.get('/users', UserBus.getUsers);
 app.get('/users/:user_id', UserBus.getUser);
 app.post('/users', UserBus.createUser);
+app.post('/users/:user_id/books/:book_id', UserBus.borrowBook);
 app.put('/users/:user_id', UserBus.updateUser);
 app.delete('/users/:user_id', UserBus.removeUser);
 

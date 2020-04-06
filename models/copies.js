@@ -13,7 +13,12 @@ module.exports = (sequelize, DataTypes) => {
         Copies.belongsTo(models.Books, {
             foreignKey: 'bookId', 
             as: 'book'
-        })
+        });
+        Copies.belongsToMany(models.Users, {
+            through: 'BorrowedBooks', 
+            foreignKey: 'copyId', 
+            as: 'borrowedUsers'
+        });
     };
     return Copies;
 }

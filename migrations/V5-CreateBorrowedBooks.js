@@ -11,22 +11,22 @@ module.exports = {
             copyId: {
                 allowNull: false,
                 type: Sequelize.INTEGER,
-                references: {
-                    models: "Copies",
-                    key: "id"
-                },
-                onUpdate: 'CASCADE',
-                onDelete: 'CASCADE'
+                // references: {
+                //     models: "Copies",
+                //     key: "id"
+                // },
+                // onUpdate: 'CASCADE',
+                // onDelete: 'CASCADE'
             },
             userId: {
                 allowNull: false,
                 type: Sequelize.INTEGER,
-                references: {
-                    models: "Users",
-                    key: "id"
-                },
-                onUpdate: 'CASCADE',
-                onDelete: 'CASCADE'
+                // references: {
+                //     models: "Users",
+                //     key: "id"
+                // },
+                // onUpdate: 'CASCADE',
+                // onDelete: 'CASCADE'
             },
             createdAt: {
                 allowNull: false,

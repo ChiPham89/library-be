@@ -1,4 +1,6 @@
 import models from '../../models';
+import CopiesStatus from '../constant/CopiesStatus';
+import BookBus from './BookBus';
 
 export default class UserBus {
     static getUsers = (req, res, next) => {
@@ -9,13 +11,18 @@ export default class UserBus {
     }
 
     static getUser = (req, res, next) => {
-        models.Users.findOne({
-            where: {
-                id: req.params.user_id
-            }
-        })
+        this.getUserById(req.params.user_id)
         .then(user => {
             res.send(user);
+        });
+    }
+
+    static getUserById = (userId) => {
+        return models.Users.findOne({
+            where: {
+                id: userId
+            },
+            include: ['borrowedBooks']
         });
     }
 
@@ -38,6 +45,28 @@ export default class UserBus {
         })
         .then(user => {
             res.send(user);
+        });
+    }
+
+    static borrowBook = (req, res, next) => {
+        Promise.all([
+            BookBus.getAvailableCopy(req.params.book_id),
+            this.getUserById(req.params.user_id)
+        ])
+        .then(results => {
+            let copy = results[0];
+            let user = results[1];
+            console.log("Copy info: ", copy);
+            user.borrowedBooks.push(copy);
+            console.log("No borrowedBooks: ", user.borrowedBooks.length);
+            user.setBorrowedBooks(user.borrowedBooks);
+        })
+        .then(result => {
+            res.send("User borrow book successful");
+        })
+        .catch(err => {
+            console.log("err: ", err);
+            res.send(err);
         });
     }
 

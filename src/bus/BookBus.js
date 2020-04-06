@@ -99,4 +99,16 @@ export default class BookBus {
             res.send("Remove book successful");
         })
     }
+
+    static getAvailableCopy = (bookId) => {
+        return models.Books.findOne({
+            where: {
+                id: bookId
+            },
+            include: ['author', 'copies']
+        })
+        .then(book => {
+            return book.copies.find(copy => copy.status == CopiesStatus.AVAILABLE)
+        });
+    }
 }
