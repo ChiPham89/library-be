@@ -56,9 +56,7 @@ export default class UserBus {
         .then(results => {
             let copy = results[0];
             let user = results[1];
-            console.log("Copy info: ", copy);
             user.borrowedBooks.push(copy);
-            console.log("No borrowedBooks: ", user.borrowedBooks.length);
             user.setBorrowedBooks(user.borrowedBooks);
             models.Copies.update({
                 ...copy,
@@ -76,6 +74,34 @@ export default class UserBus {
             console.log("err: ", err);
             res.send(err);
         });
+    }
+
+    static returnBook = (req, res, next) => {
+        this.getUserById(req.params.user_id)
+        .then(user => {
+            let returnBookCopy = user.borrowedBooks
+                .find(bookCopy => bookCopy.bookId == req.params.book_id);
+
+            if(returnBookCopy) {
+                let remainingBorrowedBooks = user.borrowedBooks
+                    .filter(bookCopy => bookCopy.bookId != req.params.book_id);
+                user.setBorrowedBooks(remainingBorrowedBooks);
+
+                models.Copies.update({
+                    ...returnBookCopy,
+                    status: CopiesStatus.AVAILABLE
+                }, {
+                    where: {
+                        id: returnBookCopy.id
+                    }
+                })
+                .then(result => {
+                    res.send("Return successful");
+                });
+            } else {
+                res.send("User didn't borrow this book!");
+            }
+        })
     }
 
     static removeUser = (req, res, next) => {
