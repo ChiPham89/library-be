@@ -60,6 +60,14 @@ export default class UserBus {
             user.borrowedBooks.push(copy);
             console.log("No borrowedBooks: ", user.borrowedBooks.length);
             user.setBorrowedBooks(user.borrowedBooks);
+            models.Copies.update({
+                ...copy,
+                status: CopiesStatus.BORROWED
+            }, {
+                where: {
+                    id: copy.id
+                }
+            });
         })
         .then(result => {
             res.send("User borrow book successful");

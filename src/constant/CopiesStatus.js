@@ -1,5 +1,5 @@
 export default class CopiesStatus {
     static AVAILABLE = 'AVAILABLE';
-    static BORROW = 'BORROW';
+    static BORROWED = 'BORROWED';
     static DAMAGED = 'DAMAGED';
 }
