@@ -1,5 +1,6 @@
 import models from '../../models';
 import CopiesStatus from '../constant/CopiesStatus';
+import NotFoundError from '../error/NotFoundError';
 import BookBus from './BookBus';
 
 export default class UserBus {
@@ -14,7 +15,15 @@ export default class UserBus {
         this.getUserById(req.params.user_id)
         .then(user => {
             res.send(user);
-        });
+        })
+        .catch(err => {
+            if (err.status) {
+                res.status(err.status).send(err.message);
+            } else {
+                console.log(err.stack);
+                res.status(500).send("Something went wrong!");
+            }
+        });;
     }
 
     static getUserById = (userId) => {
@@ -23,6 +32,13 @@ export default class UserBus {
                 id: userId
             },
             include: ['borrowedBooks']
+        })
+        .then(user => {
+            if(user) {
+                return user;
+            } else {
+                throw new NotFoundError(`User with id ${userId} is not found!`);
+            }
         });
     }
 
@@ -71,8 +87,12 @@ export default class UserBus {
             res.send("User borrow book successful");
         })
         .catch(err => {
-            console.log("err: ", err);
-            res.send(err);
+            if (err.status) {
+                res.status(err.status).send(err.message);
+            } else {
+                console.log(err.stack);
+                res.status(500).send("Something went wrong!");
+            }
         });
     }
 
