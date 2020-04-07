@@ -1,36 +1,15 @@
 import 'dotenv/config';
 import express from 'express';
 
-import AuthorBus from './bus/AuthorBus';
-import BookBus from './bus/BookBus';
-import UserBus from './bus/UserBus';
+import authorRoute from './route/AuthorRoute';
+import bookRoute from './route/BookRoute';
+import userRoute from './route/UserRoute';
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.get('/authors', AuthorBus.getAuthors);
-app.get('/authors/:author_id', AuthorBus.getAuthor);
-app.post('/authors', AuthorBus.createAuthor);
-app.put('/authors/:author_id', AuthorBus.updateAuthor);
-app.delete('/authors/:author_id', AuthorBus.removeAuthor);
-
-app.get('/books', BookBus.getBooks);
-app.get('/authors/:author_id/books', BookBus.getBooksByAuthor);
-app.get('/authors/:author_id/books/:book_id', BookBus.getBook);
-app.post('/authors/:author_id/books', BookBus.createBook);
-app.post('/authors/:author_id/books/:book_id/copies', BookBus.addCopies);
-app.put('/authors/:author_id/books/:book_id', BookBus.updateBook);
-app.delete('/authors/:author_id/books/:book_id', BookBus.removeBook);
-
-app.get('/users', UserBus.getUsers);
-app.get('/users/:user_id', UserBus.getUser);
-app.post('/users', UserBus.createUser);
-app.post('/users/:user_id/books/:book_id/borrow', UserBus.borrowBook);
-app.post('/users/:user_id/books/:book_id/return', UserBus.returnBook);
-app.put('/users/:user_id', UserBus.updateUser);
-app.delete('/users/:user_id', UserBus.removeUser);
+app.use('/', authorRoute, bookRoute, userRoute);
 
 app.listen(process.env.PORT, () =>
   console.log(`Example app listening on port ${process.env.PORT}!`),
