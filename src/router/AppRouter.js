@@ -1,9 +1,8 @@
 import { Router } from 'express';
+import { readdirSync } from "fs";
+import { join } from 'path';
 
 import HTTPMethods from '../constant/HTTPMethods';
-import authorRoutes from './AuthorRoute';
-import bookRoutes from './BookRoute';
-import userRoutes from './UserRoute';
 
 class AppRouter {
     static router = Router();
@@ -32,10 +31,22 @@ class AppRouter {
             this.registerRoute(route);
         });
     }
+
+    static importRoute(path) {
+        console.log(path);
+        let routes = require(path);
+        console.log(routes);
+        this.registerRoutes(routes.default);
+    }
 }
 
-AppRouter.registerRoutes(authorRoutes);
-AppRouter.registerRoutes(bookRoutes);
-AppRouter.registerRoutes(userRoutes);
+const routesDir = __dirname + '/routes';
+readdirSync(routesDir)
+  .filter(file => {
+    return (file.indexOf('.') !== 0) && (file.slice(-3) === '.js');
+  })
+  .forEach(file => {
+    AppRouter.importRoute(join(routesDir, file));
+  });
 
 export default AppRouter.router;

@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
-import UserAction from '../action/UserAction';
-import Route from './Route';
-import HTTPMethods from '../constant/HTTPMethods';
+import UserAction from '../../action/UserAction';
+import Route from '../Route';
+import HTTPMethods from '../../constant/HTTPMethods';
 
 const userRoutes = [];
 

@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
-import AuthorAction from '../action/AuthorAction';
-import Route from './Route';
-import HTTPMethods from '../constant/HTTPMethods';
+import AuthorAction from '../../action/AuthorAction';
+import Route from '../Route';
+import HTTPMethods from '../../constant/HTTPMethods';
 
 const authorRoutes = [];
 

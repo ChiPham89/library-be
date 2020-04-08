@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
-import BookAction from '../action/BookAction';
-import Route from './Route';
-import HTTPMethods from '../constant/HTTPMethods';
+import BookAction from '../../action/BookAction';
+import Route from '../Route';
+import HTTPMethods from '../../constant/HTTPMethods';
 
 const bookRoutes = [];
 
