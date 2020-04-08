@@ -1,6 +1,9 @@
 import { Router } from 'express';
 
 import HTTPMethods from '../constant/HTTPMethods';
+import authorRoutes from './AuthorRoute';
+import bookRoutes from './BookRoute';
+import userRoutes from './UserRoute';
 
 class AppRouter {
     static router = Router();
@@ -31,4 +34,8 @@ class AppRouter {
     }
 }
 
-export default AppRouter;
+AppRouter.registerRoutes(authorRoutes);
+AppRouter.registerRoutes(bookRoutes);
+AppRouter.registerRoutes(userRoutes);
+
+export default AppRouter.router;

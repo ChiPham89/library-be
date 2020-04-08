@@ -1,8 +1,7 @@
 import { Router } from 'express';
 
-import Route from './Route';
-import AppRouter from './AppRouter';
 import UserAction from '../action/UserAction';
+import Route from './Route';
 import HTTPMethods from '../constant/HTTPMethods';
 
 const userRoutes = [];
@@ -15,4 +14,4 @@ userRoutes.push(new Route(HTTPMethods.POST, '/users/:user_id/books/:book_id/retu
 userRoutes.push(new Route(HTTPMethods.PUT, '/users/:user_id', UserAction.updateUser));
 userRoutes.push(new Route(HTTPMethods.DELETE, '/users/:user_id', UserAction.removeUser));
 
-AppRouter.registerRoutes(userRoutes);
+export default userRoutes;
