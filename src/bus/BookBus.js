@@ -1,4 +1,5 @@
 import models from '../../models';
+import NotFoundError from '../error/NotFoundError';
 import CopiesStatus from '../constant/CopiesStatus';
 
 export default class BookBus {
@@ -21,6 +22,13 @@ export default class BookBus {
                 id: bookId
             },
             include: ['author', 'copies']
+        })
+        .then(book => {
+            if(book) {
+                return book;
+            } else {
+                throw new NotFoundError(`Book of author ${authorId} with id ${bookId} is not found!`);
+            }
         });
     }
 

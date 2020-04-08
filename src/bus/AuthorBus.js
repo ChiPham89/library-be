@@ -1,4 +1,5 @@
 import models from '../../models';
+import NotFoundError from '../error/NotFoundError';
 
 export default class AuthorBus {
     static getAuthors = () => {
@@ -9,6 +10,13 @@ export default class AuthorBus {
         return models.Authors.findOne({
             where: {
                 id: authorId
+            }
+        })
+        .then(author => {
+            if(author) {
+                return author;
+            } else {
+                throw new NotFoundError(`Author with id ${authorId} is not found!`);
             }
         });
     }

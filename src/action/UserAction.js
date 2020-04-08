@@ -1,10 +1,14 @@
 import UserBus from '../bus/UserBus';
+import ActionHandler from './ActionHandler';
 
-export default class UserAction {
+export default class UserAction extends ActionHandler{
     static getUsers = (req, res, next) => {
         return UserBus.getUsers()
         .then(users => {
             res.send(users);
+        })
+        .catch(err => {
+            this.handleError(err, res);
         });
     }
 
@@ -14,19 +18,17 @@ export default class UserAction {
             res.send(user);
         })
         .catch(err => {
-            if (err.status) {
-                res.status(err.status).send(err.message);
-            } else {
-                console.log(err.stack);
-                res.status(500).send("Something went wrong!");
-            }
-        });;
+            this.handleError(err, res);
+        });
     }
 
     static createUser = (req, res, next) => {
         return UserBus.createUser(req.body)
         .then(user => {
             res.send(user);
+        })
+        .catch(err => {
+            this.handleError(err, res);
         });
     }
 
@@ -34,6 +36,9 @@ export default class UserAction {
         return UserBus.updateUser(req.params.user_id, req.body)
         .then(user => {
             res.send(user);
+        })
+        .catch(err => {
+            this.handleError(err, res);
         });
     }
 
@@ -43,12 +48,7 @@ export default class UserAction {
             res.send("User borrow book successful");
         })
         .catch(err => {
-            if (err.status) {
-                res.status(err.status).send(err.message);
-            } else {
-                console.log(err.stack);
-                res.status(500).send("Something went wrong!");
-            }
+            this.handleError(err, res);
         });
     }
 
@@ -58,12 +58,7 @@ export default class UserAction {
             res.send("User return book successful");
         })
         .catch(err => {
-            if (err.status) {
-                res.status(err.status).send(err.message);
-            } else {
-                console.log(err.stack);
-                res.status(500).send("Something went wrong!");
-            }
+            this.handleError(err, res);
         });
     }
 
@@ -71,6 +66,9 @@ export default class UserAction {
         return UserBus.removeUser(req.params.user_id)
         .then(user => {
             res.send("Remove user successful");
+        })
+        .catch(err => {
+            this.handleError(err, res);
         });
     }
 }
