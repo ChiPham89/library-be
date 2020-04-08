@@ -1,7 +1,8 @@
 import { Router } from 'express';
 
-import BookAction from '../action/BookAction';
 import Route from './Route';
+import AppRouter from './AppRouter';
+import BookAction from '../action/BookAction';
 import HTTPMethods from '../constant/HTTPMethods';
 
 const bookRoutes = [];
@@ -14,4 +15,4 @@ bookRoutes.push(new Route(HTTPMethods.POST, '/authors/:author_id/books/:book_id/
 bookRoutes.push(new Route(HTTPMethods.PUT, '/authors/:author_id/books/:book_id', BookAction.updateBook));
 bookRoutes.push(new Route(HTTPMethods.DELETE, '/authors/:author_id/books/:book_id', BookAction.removeBook));
 
-export default bookRoutes;
+AppRouter.registerRoutes(bookRoutes);
