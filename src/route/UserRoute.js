@@ -1,17 +1,17 @@
 import { Router } from 'express';
 
-import UserBus from '../bus/UserBus';
+import UserAction from '../action/UserAction';
 import Route from './Route';
 import HTTPMethods from '../constant/HTTPMethods';
 
 const userRoutes = [];
 
-userRoutes.push(new Route(HTTPMethods.GET, '/users', UserBus.getUsers));
-userRoutes.push(new Route(HTTPMethods.GET, '/users/:user_id', UserBus.getUser));
-userRoutes.push(new Route(HTTPMethods.POST, '/users', UserBus.createUser));
-userRoutes.push(new Route(HTTPMethods.POST, '/users/:user_id/books/:book_id/borrow', UserBus.borrowBook));
-userRoutes.push(new Route(HTTPMethods.POST, '/users/:user_id/books/:book_id/return', UserBus.returnBook));
-userRoutes.push(new Route(HTTPMethods.PUT, '/users/:user_id', UserBus.updateUser));
-userRoutes.push(new Route(HTTPMethods.DELETE, '/users/:user_id', UserBus.removeUser));
+userRoutes.push(new Route(HTTPMethods.GET, '/users', UserAction.getUsers));
+userRoutes.push(new Route(HTTPMethods.GET, '/users/:user_id', UserAction.getUser));
+userRoutes.push(new Route(HTTPMethods.POST, '/users', UserAction.createUser));
+userRoutes.push(new Route(HTTPMethods.POST, '/users/:user_id/books/:book_id/borrow', UserAction.borrowBook));
+userRoutes.push(new Route(HTTPMethods.POST, '/users/:user_id/books/:book_id/return', UserAction.returnBook));
+userRoutes.push(new Route(HTTPMethods.PUT, '/users/:user_id', UserAction.updateUser));
+userRoutes.push(new Route(HTTPMethods.DELETE, '/users/:user_id', UserAction.removeUser));
 
 export default userRoutes;

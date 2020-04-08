@@ -1,56 +1,39 @@
 import models from '../../models';
 
 export default class AuthorBus {
-    static getAuthors = (req, res, next) => {
-        models.Authors.findAll()
-        .then(authors => {
-            res.send(authors);
-        });
+    static getAuthors = () => {
+        return models.Authors.findAll();
     }
 
-    static getAuthor = (req, res, next) => {
-        models.Authors.findOne({
+    static getAuthorById = (authorId) => {
+        return models.Authors.findOne({
             where: {
-                id: req.params.author_id
+                id: authorId
             }
-        })
-        .then(author => {
-            res.send(author);
         });
     }
 
-    static createAuthor = (req, res, next) => {
-        models.Authors.create({
-            name: req.body.name,
-            penName: req.body.penName
-        })
-        .then(author => {
-            res.send(author);
+    static createAuthor = (author) => {
+        return models.Authors.create({
+            ... author
         });
     }
 
-    static updateAuthor = (req, res, next) => {
-        models.Authors.update({
-            name: req.body.name,
-            penName: req.body.penName
+    static updateAuthor = (authorId, author) => {
+        return models.Authors.update({
+            ...author
         }, {
             where: {
-                id: req.params.author_id
+                id: authorId
             }
-        })
-        .then(author => {
-            res.send(author);
         });
     }
 
-    static removeAuthor = (req, res, next) => {
-        models.Authors.destroy({
+    static removeAuthor = (authorId) => {
+        return models.Authors.destroy({
             where: {
-                id: req.params.author_id
+                id: authorId
             }
-        })
-        .then(author => {
-            res.send("Remove author successful");
         });
     }
 }

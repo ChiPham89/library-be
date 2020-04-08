@@ -2,42 +2,32 @@ import models from '../../models';
 import CopiesStatus from '../constant/CopiesStatus';
 
 export default class BookBus {
-    static getBooks = (req, res, next) => {
-        models.Books.findAll()
-        .then(books => {
-            res.send(books);
-        });
+    static getBooks = () => {
+        return models.Books.findAll();
     }
 
-    static getBooksByAuthor = (req, res, next) => {
-        models.Books.findAll({
+    static getBooksByAuthor = (authorId) => {
+        return models.Books.findAll({
             where: {
-                authorId: req.params.author_id
+                authorId: authorId
             }
-        })
-        .then(books => {
-            res.send(books);
         });
     }
 
-    static getBook = (req, res, next) => {
-        models.Books.findOne({
+    static getBookById = (authorId, bookId) => {
+        return models.Books.findOne({
             where: {
-                authorId: req.params.author_id,
-                id: req.params.book_id
+                authorId: authorId,
+                id: bookId
             },
             include: ['author', 'copies']
-        })
-        .then(book => {
-            res.send(book);
-        })
+        });
     }
 
-    static createBook = (req, res, next) => {
-        let authorId = req.params.author_id;
-        let numberOfCopy = req.body.numberOfCopy ? req.body.numberOfCopy : 1;
-        models.Books.create({
-            ...req.body,
+    static createBook = (authorId, book) => {
+        let numberOfCopy = book.numberOfCopy ? book.numberOfCopy : 1;
+        return models.Books.create({
+            ...book,
             authorId
         })
         .then(book => {
@@ -48,16 +38,15 @@ export default class BookBus {
                 })
             }
             
-            res.send(book);
+            return book;
         });
     }
 
-    static addCopies = (req, res, next) => {
-        let numberOfCopy = req.body.numberOfCopy ? req.body.numberOfCopy : 1;
-        models.Books.findOne({
+    static addCopies = (authorId, bookId, numberOfCopy) => {
+        return models.Books.findOne({
             where: {
-                authorId: req.params.author_id,
-                id: req.params.book_id
+                authorId: authorId,
+                id: bookId
             }
         })
         .then(book => {
@@ -68,36 +57,29 @@ export default class BookBus {
                 })
             }
             
-            res.send(book);
+            return book;
         });
     }
 
-    static updateBook = (req, res, next) => {
-        let authorId = req.params.author_id;
-        models.Books.update({
-            ...req.body,
+    static updateBook = (authorId, bookId, book) => {
+        return models.Books.update({
+            ...book,
             authorId
         }, {
             where: {
-                authorId: req.params.author_id,
-                id: req.params.book_id
+                authorId: authorId,
+                id: bookId
             }
-        })
-        .then(book => {
-            res.send(book);
         });
     }
 
-    static removeBook = (req, res, next) => {
-        models.Books.destroy({
+    static removeBook = (authorId, bookId) => {
+        return models.Books.destroy({
             where: {
-                authorId: req.params.author_id,
-                id: req.params.book_id
+                authorId: authorId,
+                id: bookId
             }
-        })
-        .then(book => {
-            res.send("Remove book successful");
-        })
+        });
     }
 
     static getAvailableCopy = (bookId) => {

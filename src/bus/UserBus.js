@@ -1,29 +1,12 @@
 import models from '../../models';
 import CopiesStatus from '../constant/CopiesStatus';
 import NotFoundError from '../error/NotFoundError';
+import ActionNotAllowError from '../error/ActionNotAllowError';
 import BookBus from './BookBus';
 
 export default class UserBus {
-    static getUsers = (req, res, next) => {
-        models.Users.findAll()
-        .then(users => {
-            res.send(users);
-        });
-    }
-
-    static getUser = (req, res, next) => {
-        this.getUserById(req.params.user_id)
-        .then(user => {
-            res.send(user);
-        })
-        .catch(err => {
-            if (err.status) {
-                res.status(err.status).send(err.message);
-            } else {
-                console.log(err.stack);
-                res.status(500).send("Something went wrong!");
-            }
-        });;
+    static getUsers = () => {
+        return models.Users.findAll();
     }
 
     static getUserById = (userId) => {
@@ -42,32 +25,26 @@ export default class UserBus {
         });
     }
 
-    static createUser = (req, res, next) => {
-        models.Users.create({
-            ...req.body
-        })
-        .then(user => {
-            res.send(user);
+    static createUser = (user) => {
+        return models.Users.create({
+            ...user
         });
     }
 
-    static updateUser = (req, res, next) => {
-        models.Users.update({
-            ...req.body
+    static updateUser = (userId, user) => {
+        return models.Users.update({
+            ...user
         }, {
             where: {
-                id: req.params.user_id
+                id: userId
             }
-        })
-        .then(user => {
-            res.send(user);
         });
     }
 
-    static borrowBook = (req, res, next) => {
-        Promise.all([
-            BookBus.getAvailableCopy(req.params.book_id),
-            this.getUserById(req.params.user_id)
+    static borrowBook = (userId, borrowBookId) => {
+        return Promise.all([
+            BookBus.getAvailableCopy(borrowBookId),
+            this.getUserById(userId)
         ])
         .then(results => {
             let copy = results[0];
@@ -82,32 +59,21 @@ export default class UserBus {
                     id: copy.id
                 }
             });
-        })
-        .then(result => {
-            res.send("User borrow book successful");
-        })
-        .catch(err => {
-            if (err.status) {
-                res.status(err.status).send(err.message);
-            } else {
-                console.log(err.stack);
-                res.status(500).send("Something went wrong!");
-            }
         });
     }
 
-    static returnBook = (req, res, next) => {
-        this.getUserById(req.params.user_id)
+    static returnBook = (userId, returnBookId) => {
+        return this.getUserById(ruserId)
         .then(user => {
             let returnBookCopy = user.borrowedBooks
-                .find(bookCopy => bookCopy.bookId == req.params.book_id);
+                .find(bookCopy => bookCopy.bookId == returnBookId);
 
             if(returnBookCopy) {
                 let remainingBorrowedBooks = user.borrowedBooks
-                    .filter(bookCopy => bookCopy.bookId != req.params.book_id);
+                    .filter(bookCopy => bookCopy.bookId != returnBookId);
                 user.setBorrowedBooks(remainingBorrowedBooks);
 
-                models.Copies.update({
+                return models.Copies.update({
                     ...returnBookCopy,
                     status: CopiesStatus.AVAILABLE
                 }, {
@@ -116,22 +82,19 @@ export default class UserBus {
                     }
                 })
                 .then(result => {
-                    res.send("Return successful");
+                    return result;
                 });
             } else {
-                res.send("User didn't borrow this book!");
+                throw new ActionNotAllowError(`User ${userId} didn't borrow ${returnBookId}!`);
             }
         })
     }
 
-    static removeUser = (req, res, next) => {
-        models.Users.destroy({
+    static removeUser = (userId) => {
+        return models.Users.destroy({
             where: {
-                id: req.params.user_id
+                id: userId
             }
-        })
-        .then(user => {
-            res.send("Remove user successful");
         });
     }
 }
