@@ -33,8 +33,8 @@ class AppRouter {
     }
 
     static importRoute(path) {
-        let routes = require(path);
-        this.registerRoutes(routes.default);
+        let routes = require(path).default;
+        this.registerRoutes(routes);
     }
 }
 
