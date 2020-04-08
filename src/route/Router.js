@@ -2,6 +2,8 @@ import { Router } from 'express';
 
 import HTTPMethods from '../constant/HTTPMethods';
 import authorRoutes from './AuthorRoute';
+import bookRoutes from './BookRoute';
+import userRoutes from './UserRoute';
 
 class AppRouter {
     static router = Router();
@@ -24,10 +26,16 @@ class AppRouter {
                 console.log("Unrecognised method");
         }
     }
+
+    static registerRoutes(routes) {
+        routes.forEach(route => {
+            this.registerRoute(route);
+        });
+    }
 }
 
-authorRoutes.forEach(route => {
-    AppRouter.registerRoute(route);
-});
+AppRouter.registerRoutes(authorRoutes);
+AppRouter.registerRoutes(bookRoutes);
+AppRouter.registerRoutes(userRoutes);
 
 export default AppRouter.router;
