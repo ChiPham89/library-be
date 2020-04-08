@@ -33,9 +33,7 @@ class AppRouter {
     }
 
     static importRoute(path) {
-        console.log(path);
         let routes = require(path);
-        console.log(routes);
         this.registerRoutes(routes.default);
     }
 }
