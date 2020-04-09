@@ -1,8 +1,7 @@
 import { Router } from 'express';
-import { readdirSync } from "fs";
-import { join } from 'path';
 
 import HTTPMethods from '../constant/HTTPMethods';
+import routes from './routes';
 
 class AppRouter {
     static router = Router();
@@ -31,20 +30,8 @@ class AppRouter {
             this.registerRoute(route);
         });
     }
-
-    static importRoute(path) {
-        let routes = require(path).default;
-        this.registerRoutes(routes);
-    }
 }
 
-const routesDir = __dirname + '/routes';
-readdirSync(routesDir)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file.slice(-3) === '.js');
-  })
-  .forEach(file => {
-    AppRouter.importRoute(join(routesDir, file));
-  });
+AppRouter.registerRoutes(routes);
 
 export default AppRouter.router;
